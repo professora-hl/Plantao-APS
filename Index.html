@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantão APS — 30 Casos Clínicos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0d1f3c; --navy-mid:#162d52;
+  --teal:#1a7a72; --teal-light:#c8ebe8;
+  --gold:#c9933a; --gold-light:#f5e8d0;
+  --coral:#c95a3a; --coral-light:#f5ddd4;
+  --sky:#2e6fa8; --sky-light:#d4e8f5;
+  --sage:#4a7c59; --sage-light:#d5e8da;
+  --plum:#6e3a6e; --plum-light:#e8d4e8;
+  --lavender:#7b6bae; --lavender-light:#e8e4f5;
+  --paper:#f4f7f6; --white:#fff;
+  --ink:#0d1f2d; --muted:#5a7080; --border:#d0dde0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#c8c0e8 0%,#b8a8e0 30%,#d8c8f0 60%,#f0e8f8 100%);color:var(--navy);position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 55% 70% at 10% 50%,rgba(123,107,174,.35) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 50% at 90% 20%,rgba(180,160,220,.2) 0%,transparent 50%);z-index:1;}
+/* Cruz decorativa ENA ao fundo */
+header::after{content:'';position:absolute;left:3%;top:50%;transform:translateY(-50%);width:140px;height:140px;
+  background:rgba(123,107,174,.18);border-radius:16px;rotate:-10deg;z-index:1;}
+.header-inner{position:relative;z-index:2;padding:2.8rem 2rem 2rem;text-align:center;}
+/* Badge "Treinamento" exato do PDF */
+.header-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(123,107,174,.9);color:white;font-size:.72rem;font-weight:600;letter-spacing:1px;padding:.3rem .9rem;border-radius:8px;margin-bottom:.6rem;}
+.header-badge-alarm{font-size:.85rem;}
+/* PLANTÃO APS branding */
+.header-plantao{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;color:#1a1040;letter-spacing:.08em;line-height:1;}
+.header-aps{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,5rem);font-weight:700;color:#5a4a9e;letter-spacing:.12em;line-height:1;margin:.1rem 0 .3rem;}
+.header-subtitle{font-size:.82rem;color:#3a2a6a;opacity:.75;font-weight:400;margin-bottom:1.2rem;}
+.header-tags{display:flex;justify-content:center;gap:.45rem;flex-wrap:wrap;margin-top:1rem;}
+.htag{padding:.28rem .85rem;border-radius:99px;font-size:.68rem;font-weight:600;letter-spacing:.4px;text-transform:uppercase;}
+.htag.prenatal{background:rgba(26,122,114,.18);color:#0d5c55;border:1px solid rgba(26,122,114,.35);}
+.htag.puerperio{background:rgba(110,58,110,.15);color:#5a1a6a;border:1px solid rgba(110,58,110,.3);}
+.htag.crianca{background:rgba(46,111,168,.15);color:#1a3a6a;border:1px solid rgba(46,111,168,.3);}
+.htag.ist{background:rgba(180,60,40,.15);color:#7a1a0a;border:1px solid rgba(180,60,40,.3);}
+.htag.gineco{background:rgba(90,74,158,.15);color:#3a2a7a;border:1px solid rgba(90,74,158,.3);}
+.htag.avancado{background:rgba(40,100,60,.15);color:#1a4a2a;border:1px solid rgba(40,100,60,.3);}
+/* Contador de casos */
+.header-count{display:inline-block;background:rgba(90,74,158,.15);border:1px solid rgba(90,74,158,.3);color:#3a2a7a;font-size:.72rem;font-weight:600;padding:.25rem .8rem;border-radius:99px;margin-top:.8rem;}
+
+.progress-bar{background:rgba(90,74,158,.15);height:3px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#7b6bae,#c9a0dc);width:0%;transition:width .5s ease;}
+
+/* CONTAINER */
+.container{max-width:980px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+
+/* SECTION DIVIDERS */
+.serie-label{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1.2rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);}
+.serie-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.serie-pill{background:var(--lavender);color:white;padding:.3rem .9rem;border-radius:99px;font-size:.68rem;font-weight:600;white-space:nowrap;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.8rem;background:white;border:1px solid var(--border);border-radius:14px;padding:.9rem 1.1rem;align-items:center;box-shadow:0 2px 12px rgba(13,31,60,.06);}
+.filter-label{font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-right:.3rem;}
+.fbtn{padding:.32rem .9rem;border-radius:99px;font-size:.78rem;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--muted);transition:all .2s;font-family:'Outfit',sans-serif;}
+.fbtn:hover,.fbtn.active{background:var(--lavender);color:white;border-color:var(--lavender);}
+
+/* CASES */
+.casos-lista{display:flex;flex-direction:column;gap:1.2rem;}
+.caso{background:white;border-radius:18px;border:1px solid var(--border);overflow:hidden;transition:box-shadow .3s,transform .3s;animation:fadeUp .45s ease both;box-shadow:0 2px 8px rgba(13,31,60,.05);}
+.caso:hover{box-shadow:0 10px 40px rgba(13,31,60,.12);transform:translateY(-3px);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.caso.hidden{display:none!important;}
+
+.caso-header{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.5rem;cursor:pointer;user-select:none;}
+.caso-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--lavender);line-height:1;min-width:30px;flex-shrink:0;}
+.divider-line{width:1px;height:34px;background:var(--border);flex-shrink:0;}
+.caso-info{flex:1;}
+.caso-titulo{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:600;color:var(--ink);line-height:1.35;}
+.caso-tags-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem;}
+.chevron{width:17px;height:17px;color:var(--muted);transition:transform .3s;flex-shrink:0;}
+.caso.open .chevron{transform:rotate(180deg);}
+
+/* CTAGS */
+.ctag{padding:.18rem .65rem;border-radius:99px;font-size:.67rem;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
+.ctag.prenatal{background:var(--teal-light);color:var(--teal);}
+.ctag.puerperio{background:var(--plum-light);color:var(--plum);}
+.ctag.crianca{background:var(--sky-light);color:var(--sky);}
+.ctag.ist{background:var(--coral-light);color:var(--coral);}
+.ctag.gineco{background:var(--lavender-light);color:var(--lavender);}
+.ctag.toxo{background:var(--gold-light);color:var(--gold);}
+.ctag.sifilis{background:var(--coral-light);color:var(--coral);}
+.ctag.pe{background:var(--plum-light);color:var(--plum);}
+.ctag.dmg{background:var(--sky-light);color:var(--sky);}
+.ctag.vaginose{background:var(--sage-light);color:var(--sage);}
+.ctag.triagem{background:#e8eef2;color:#4a6070;}
+.ctag.masculino{background:#e8eaf0;color:#3a4070;}
+
+/* BODY */
+.caso-body{display:none;border-top:1px solid var(--border);padding:1.5rem;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.caso.open .caso-body{display:block;}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:.65rem;margin-bottom:1.3rem;}
+.icard{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:.6rem .85rem;}
+.icard label{display:block;font-size:.64rem;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:.12rem;}
+.icard span{font-size:.87rem;font-weight:500;color:var(--ink);}
+
+.sec{margin-bottom:1.2rem;}
+.sec-title{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--teal);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.sec p,.sec li{font-size:.9rem;line-height:1.72;color:#1e3040;}
+.sec ul{padding-left:1.2rem;}
+.sec li{margin-bottom:.2rem;}
+
+.hbox{border-radius:10px;padding:.85rem 1.05rem;font-size:.87rem;line-height:1.7;margin-bottom:.5rem;}
+.hbox.teal{background:var(--teal-light);border-left:3px solid var(--teal);}
+.hbox.gold{background:var(--gold-light);border-left:3px solid var(--gold);}
+.hbox.coral{background:var(--coral-light);border-left:3px solid var(--coral);}
+.hbox.sky{background:var(--sky-light);border-left:3px solid var(--sky);}
+.hbox.sage{background:var(--sage-light);border-left:3px solid var(--sage);}
+.hbox.plum{background:var(--plum-light);border-left:3px solid var(--plum);}
+.hbox.lavender{background:var(--lavender-light);border-left:3px solid var(--lavender);}
+.hbox.gray{background:#eef2f5;border-left:3px solid #8090a0;}
+.hbox.peach{background:#fbf3e8;border-left:3px solid #c8a870;}
+
+.alerta{display:flex;align-items:flex-start;gap:.7rem;background:#fff5f0;border:1.5px solid #f0a080;border-radius:10px;padding:.8rem 1rem;font-size:.84rem;line-height:1.6;margin-bottom:1rem;color:#7a2010;}
+.alerta-icon{font-size:1.1rem;flex-shrink:0;}
+
+.pbloco{background:#f8fafc;border:1.5px dashed var(--sky);border-radius:14px;padding:1.05rem 1.25rem;margin-top:1rem;}
+.pbloco h4{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--sky);margin-bottom:.65rem;}
+.pbloco ol{padding-left:1.2rem;}
+.pbloco li{font-size:.88rem;line-height:1.68;color:var(--ink);margin-bottom:.3rem;}
+
+footer{text-align:center;padding:2.5rem 1rem 2rem;border-top:1px solid var(--border);background:#0d1f3c;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--paper);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+@media(max-width:600px){
+  .header-inner{padding:2rem 1rem 1.5rem;}
+  .container{padding:1.2rem 1rem 3rem;}
+  .caso-header{padding:.9rem 1rem;gap:.7rem;}
+  .caso-body{padding:1.1rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <!-- Badge Treinamento exato do PDF -->
+    <div class="header-badge"><span class="header-badge-alarm">🚨</span> Treinamento</div>
+    <!-- PLANTÃO APS branding -->
+    <div class="header-plantao">PLANTÃO</div>
+    <div class="header-aps">A P S</div>
+    <div class="header-subtitle">Pré-Natal · Puerpério · Saúde da Criança · ISTs · Ginecologia · Obstetrícia Avançada</div>
+    <div class="header-count">Coletânea Completa · 30 Casos Clínicos</div>
+    <div class="header-tags">
+      <span class="htag prenatal">Pré-natal</span>
+      <span class="htag puerperio">Puerpério</span>
+      <span class="htag crianca">Saúde da Criança</span>
+      <span class="htag ist">ISTs</span>
+      <span class="htag gineco">Ginecologia</span>
+      <span class="htag avancado">Obstetrícia Avançada</span>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</header>
+
+<div class="container">
+
+  <div class="filter-bar">
+    <span class="filter-label">Filtrar:</span>
+    <button class="fbtn active" onclick="filtrar('todos',this)">Todos (30)</button>
+    <button class="fbtn" onclick="filtrar('prenatal',this)">Pré-natal</button>
+    <button class="fbtn" onclick="filtrar('puerperio',this)">Puerpério</button>
+    <button class="fbtn" onclick="filtrar('crianca',this)">Saúde da Criança</button>
+    <button class="fbtn" onclick="filtrar('ist',this)">ISTs</button>
+    <button class="fbtn" onclick="filtrar('gineco',this)">Ginecologia</button>
+    <button class="fbtn" onclick="filtrar('pe',this)">Pré-Eclâmpsia</button>
+    <button class="fbtn" onclick="filtrar('dmg',this)">DMG</button>
+    <button class="fbtn" onclick="filtrar('toxo',this)">Toxoplasmose</button>
+  </div>
+
+  <div class="casos-lista" id="casos">
+
+    <!-- ══ SÉRIE 1 ══ -->
+    <div class="serie-label"><span class="serie-pill">Treinamento 1 — Casos Fundamentais</span></div>
+
+    <div class="caso" data-tags="prenatal" style="animation-delay:.03s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">01</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Anemia Gestacional — Investigação e Conduta</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Contexto</label><span>Consulta de pré-natal</span></div>
+          <div class="icard"><label>Sintomas</label><span>Fadiga, tontura, palidez</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Durante a consulta de pré-natal, a enfermeira identifica que a gestante refere fadiga intensa, tontura e palidez há algumas semanas.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Quais exames devem ser solicitados para investigação inicial e qual a principal orientação de enfermagem para anemia ferropriva gestacional?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal ist sifilis" style="animation-delay:.05s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">02</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Sífilis Gestacional — Conduta na Atenção Básica</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span><span class="ctag sifilis">Sífilis</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Trimestre</label><span>2º trimestre</span></div>
+          <div class="icard"><label>Teste rápido</label><span>Reagente para sífilis</span></div>
+          <div class="icard"><label>Tratamento prévio</label><span>Nenhum</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Na consulta do segundo trimestre, a gestante realiza teste rápido para sífilis com resultado reagente. Refere nunca ter realizado tratamento anteriormente.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Qual deve ser a conduta imediata da equipe de enfermagem na Atenção Básica diante desse resultado?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal toxo" style="animation-delay:.07s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">03</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Toxoplasmose Gestacional — Orientações Preventivas</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span><span class="ctag toxo">Toxoplasmose</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>IG</label><span>12 semanas</span></div>
+          <div class="icard"><label>IgM</label><span>Reagente</span></div>
+          <div class="icard"><label>Fatores de risco</label><span>Gatos + carne malpassada</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Gestante de 12 semanas apresenta IgM reagente para toxoplasmose durante exames do pré-natal. Relata contato frequente com gatos e consumo de carnes malpassadas.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Quais orientações preventivas devem ser reforçadas pela enfermagem para evitar transmissão fetal?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal ist" style="animation-delay:.09s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">04</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">HIV na Gestação — Prevenção da Transmissão Vertical</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span><span class="ctag ist">HIV</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Diagnóstico</label><span>Recém-diagnosticada</span></div>
+          <div class="icard"><label>Contexto</label><span>Pré-natal de rotina</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Durante a rotina do pré-natal, o teste rápido para HIV apresenta resultado reagente. A paciente demonstra medo e insegurança quanto à saúde do bebê.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Quais são as principais orientações da enfermagem sobre prevenção da transmissão vertical do HIV?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal dmg" style="animation-delay:.11s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">05</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Diabetes Mellitus Gestacional — Rastreamento</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span><span class="ctag dmg">DMG</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>IG</label><span>28 semanas</span></div>
+          <div class="icard"><label>Sintomas</label><span>Polidipsia, poliúria</span></div>
+          <div class="icard"><label>Achado</label><span>Ganho de peso excessivo</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Gestante de 28 semanas apresenta ganho de peso excessivo e relato de muita sede e aumento da frequência urinária.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Qual exame é considerado padrão para rastreamento de diabetes gestacional e quais cuidados devem ser orientados?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="puerperio" style="animation-delay:.13s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">06</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Fissura Mamilar — Manejo no Puerpério Imediato</div>
+          <div class="caso-tags-row"><span class="ctag puerperio">Puerpério</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Dia pós-parto</label><span>5º dia</span></div>
+          <div class="icard"><label>Queixa</label><span>Dor intensa nas mamas</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>No quinto dia pós-parto, a puérpera refere dor intensa nas mamas e dificuldade para amamentar o recém-nascido.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Quais orientações de enfermagem podem ajudar na prevenção e manejo inicial da fissura mamilar?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="crianca" style="animation-delay:.15s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">07</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Atraso Vacinal — Educação em Saúde na Puericultura</div>
+          <div class="caso-tags-row"><span class="ctag crianca">Saúde da Criança</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Idade</label><span>6 meses</span></div>
+          <div class="icard"><label>Situação</label><span>Vacinas em atraso</span></div>
+          <div class="icard"><label>Motivo</label><span>Medo de reações</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Durante consulta de puericultura, a mãe informa que a criança de 6 meses perdeu algumas vacinas por medo de reações.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Qual a importância da atualização do calendário vacinal e como a enfermagem pode atuar na educação em saúde dessa família?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="crianca" style="animation-delay:.17s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">08</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Desidratação Infantil — Avaliação e Conduta Imediata</div>
+          <div class="caso-tags-row"><span class="ctag crianca">Saúde da Criança</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Idade</label><span>2 anos</span></div>
+          <div class="icard"><label>Evolução</label><span>2 dias</span></div>
+          <div class="icard"><label>Sintomas</label><span>Diarreia e vômitos</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Mãe procura a unidade de saúde relatando episódios de diarreia e vômitos há dois dias em criança de 2 anos.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Quais sinais clínicos indicam desidratação e qual deve ser a primeira conduta orientada pela enfermagem?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="puerperio" style="animation-delay:.19s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">09</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Depressão Pós-Parto — Sinais de Alerta e Apoio Multiprofissional</div>
+          <div class="caso-tags-row"><span class="ctag puerperio">Puerpério</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Contexto</label><span>Visita domiciliar</span></div>
+          <div class="icard"><label>Sinais</label><span>Tristeza intensa, choro frequente</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Durante visita domiciliar, a enfermeira percebe tristeza intensa, choro frequente e dificuldade de vínculo da mãe com o bebê.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Quais sinais de alerta devem ser observados pela equipe de enfermagem e qual a importância do apoio multiprofissional?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal pe" style="animation-delay:.21s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">10</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Síndrome Hipertensiva Gestacional — Conduta Inicial de Enfermagem</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal de Risco</span><span class="ctag pe">Hipertensão</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>IG</label><span>34 semanas</span></div>
+          <div class="icard"><label>PA</label><span>150x100 mmHg</span></div>
+          <div class="icard"><label>Sintomas</label><span>Cefaleia intensa, edema MMII</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">História</div>
+          <p>Gestante de 34 semanas apresenta cefaleia intensa, edema em membros inferiores e pressão arterial de 150x100 mmHg durante consulta.</p>
+        </div>
+        <div class="pbloco"><h4>🩺 Pergunta</h4><ol>
+          <li>Quais sinais indicam gravidade em síndromes hipertensivas da gestação e qual deve ser a conduta inicial da enfermagem?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <!-- ══ SÉRIE 2 ══ -->
+    <div class="serie-label"><span class="serie-pill">Treinamento 2 — Casos Clínicos Detalhados</span></div>
+
+    <div class="caso" data-tags="ist gineco" style="animation-delay:.23s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">11</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Candidiase Recorrente com Resistência a Fluconazol e Resistência Insulínica</div>
+          <div class="caso-tags-row"><span class="ctag ist">IST / Candidiase</span><span class="ctag gineco">Ginecologia</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Mariana, 28 anos</span></div>
+          <div class="icard"><label>Episódios/ano</label><span>≥ 5 episódios</span></div>
+          <div class="icard"><label>Anticoncepcional</label><span>ACO combinado há 3 anos</span></div>
+          <div class="icard"><label>IMC</label><span>27 kg/m²</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Queixa Principal</div>
+          <p>Prurido vulvar intenso, corrimento branco grumoso e ardência durante a relação sexual. Episódios recorrentes há 18 meses, com pequeno alívio após fluconazol 150 mg dose única, mas recidiva em 2-3 semanas.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Achados Clínicos e Laboratoriais</div>
+          <div class="hbox teal">
+            <strong>Exame ginecológico:</strong> Eritema vulvar difuso, edema, corrimento espesso branco-acinzentado, pH vaginal 4,0.<br>
+            <strong>Cultura vaginal:</strong> Candida glabrata (resistente a fluconazol in vitro).<br>
+            <strong>Laboratoriais:</strong> Glicemia jejum 108 mg/dL · Insulina 20 mUI/L · HOMA-IR 5,3 · HbA1c 5,9% · Testosterona 85 ng/dL · DHEA-S 290 µg/dL · TSH normal · Imunoglobulinas normais.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Por que o fluconazol dose única é insuficiente neste caso? Qual espécie está envolvida e suas implicações terapêuticas?</li>
+          <li>Como o ACO combinado pode favorecer a candidiase recorrente? Há necessidade de trocar o método?</li>
+          <li>Qual a relação entre a SOP/resistência insulínica e a candidiase de repetição?</li>
+          <li>Proponha um esquema de tratamento de manutenção por 6 meses baseado em evidências.</li>
+          <li>Quando encaminhar para imunoavaliação? Quais condições excluir?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="ist" style="animation-delay:.25s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">12</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Tricomoníase com Resistência ao Metronidazol e Parceiro Assintomático</div>
+          <div class="caso-tags-row"><span class="ctag ist">IST / Tricomoníase</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Fernanda, 22 anos</span></div>
+          <div class="icard"><label>Parceiros</label><span>1 parceiro fixo há 1 ano</span></div>
+          <div class="icard"><label>Tratamentos prévios</label><span>3 ciclos de metronidazol</span></div>
+          <div class="icard"><label>IST recentes</label><span>Nega outras ISTs</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Queixa Principal</div>
+          <p>Corrimento amarelo-esverdeado espumoso com odor fétido, prurido vulvar e dispareunia. Terceiro episódio em 6 meses. Nega violência ou múltiplos parceiros. Parceiro masculino assintomático, não tratado previamente.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Achados e Exames</div>
+          <div class="hbox coral">
+            <strong>Especular:</strong> Colo uterino com petéquias (aspecto "framboesa"), corrimento espumoso esverdeado. pH vaginal: 5,8.<br>
+            <strong>Microscopia a fresco:</strong> Trichomonas vaginalis móveis, muitos leucócitos.<br>
+            <strong>NAAT (PCR):</strong> T. vaginalis positivo. Gonorreia e clamídia negativos.<br>
+            <strong>HIV, sífilis:</strong> Não reagentes.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Quais os mecanismos de resistência do T. vaginalis ao metronidazol? Como confirmar resistência laboratorialmente?</li>
+          <li>Qual o esquema terapêutico para tricomoníase resistente a nitroimidazólicos?</li>
+          <li>Como deve ser abordado o parceiro assintomático? Quais ISTs rastrear nele?</li>
+          <li>A tricomoníase aumenta o risco de quais outras condições? Discuta a relação com HIV.</li>
+          <li>Quando indicar o rastreio com NAAT em vez da microscopia a fresco? Justifique a sensibilidade comparativa.</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="gineco" style="animation-delay:.27s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">13</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Mioma Submucoso FIGO Tipo 1 com Anemia Grave e DM Descompensada</div>
+          <div class="caso-tags-row"><span class="ctag gineco">Ginecologia</span><span class="ctag dmg">DM2</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Edileuza, 48 anos</span></div>
+          <div class="icard"><label>IMC</label><span>35,2 kg/m²</span></div>
+          <div class="icard"><label>HbA1c</label><span>9,2% (descompensada)</span></div>
+          <div class="icard"><label>Hemoglobina</label><span>6,8 g/dL</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Queixa Principal</div>
+          <p>Sangramento uterino intenso há 6 meses com passagem de coágulos. Dispneia a esforços moderados e palpitações. DM2 em uso de metformina 2 g/dia + glibenclamida 5 mg. Hipertensa controlada com losartana.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Achados Relevantes</div>
+          <div class="hbox lavender">
+            <strong>USG + histerossonografia:</strong> Mioma submucoso FIGO tipo 1, 3,5 cm (protrusão intracavitária 70%). Útero 12 cm.<br>
+            <strong>Histeroscopia diagnóstica:</strong> Confirma mioma submucoso pediculado, sem sinéquia.<br>
+            <strong>ECG:</strong> Taquicardia sinusal 108 bpm.<br>
+            <strong>Ecocardiograma:</strong> FE 62%, sem alterações estruturais.<br>
+            <strong>Coagulograma:</strong> Normal. Plaquetas 312.000.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Qual a classificação FIGO do mioma? Por que isso impacta a abordagem cirúrgica?</li>
+          <li>Como otimizar clinicamente esta paciente antes da histeroscopia operatória (risco cirúrgico, anemia, DM)?</li>
+          <li>Quais os riscos específicos do procedimento em paciente diabética descompensada?</li>
+          <li>O análogo de GnRH pré-operatório está indicado? Discuta vantagens e desvantagens neste perfil metabólico.</li>
+          <li>Após tratamento cirúrgico, qual é a conduta definitiva se a paciente não deseja filhos?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="gineco" style="animation-delay:.29s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">14</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">SOP com Resistência Insulínica e Perfil Cardiometabólico de Alto Risco</div>
+          <div class="caso-tags-row"><span class="ctag gineco">Ginecologia / SOP</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Ana Clara, 24 anos</span></div>
+          <div class="icard"><label>Ciclos</label><span>Amenorreia secundária</span></div>
+          <div class="icard"><label>HbA1c</label><span>5,8%</span></div>
+          <div class="icard"><label>LDL</label><span>158 mg/dL</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação Clínica</div>
+          <p>Amenorreia há 7 meses, acne grau III, hirsutismo facial. Histórico familiar de DM2 (mãe e avó materna). Sedentária, dieta rica em carboidratos refinados. Nega uso de medicamentos.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Dados Laboratoriais e de Imagem</div>
+          <div class="hbox lavender">
+            Testosterona livre 12 pg/mL (VR &lt; 6,4) · SHBG 18 nmol/L · DHEA-S 320 µg/dL · 17-OH-progesterona 1,1 ng/mL · Insulina jejum 22 mUI/L · HOMA-IR 5,0 · Glicemia jejum 107 mg/dL · HbA1c 5,8% · Triglicerídeos 210 mg/dL · HDL 38 mg/dL · LDL 158 mg/dL · PCR ultrassensível 3,1 mg/L · Cortisol e prolactina normais.<br><br>
+            <strong>USG:</strong> ≥ 20 folículos/ovário, volume ovariano 14 cm³ bilateralmente.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como diferenciar SOP de hiperplasia adrenal congênita de início tardio? Qual exame confirma?</li>
+          <li>Calcule e interprete o escore de risco cardiometabólico desta paciente. Qual a urgência da intervenção?</li>
+          <li>Metformina vs. ACO combinado: qual a melhor escolha para esta paciente? Justifique com base em fenótipo e metas.</li>
+          <li>Qual o papel do inositol (mio-inositol) e d-chiro-inositol no tratamento da SOP com RI?</li>
+          <li>Como deve ser feito o rastreio de diabetes mellitus nesta paciente a longo prazo?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="puerperio ist" style="animation-delay:.31s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">15</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Candidíase Vulvovaginal e Cutânea no Puerpério com DM Descompensado</div>
+          <div class="caso-tags-row"><span class="ctag puerperio">Puerpério</span><span class="ctag ist">Candidiase</span><span class="ctag dmg">DM2</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Cláudia, 38 anos</span></div>
+          <div class="icard"><label>Puerpério</label><span>18 dias pós-cesariana</span></div>
+          <div class="icard"><label>Glicemia</label><span>298 mg/dL em urgência</span></div>
+          <div class="icard"><label>DM prévio</label><span>DM2 há 6 anos (irregular)</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação</div>
+          <p>Lesões eritematosas com satelitose na região vulvoperineal, maceração entre pregas inguinais com descamação. Queixa de prurido intenso, ardor e placas esbranquiçadas na mucosa vaginal. Febre de 38,1°C. Incisão da cesariana com sinais de infecção superficial.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Exames</div>
+          <div class="hbox peach">
+            Cultura de secreção perineal: <em>Candida albicans</em> (sensível a fluconazol).<br>
+            HbA1c: 11,4% · Leucócitos 14.200 com desvio à esq. · PCR 48 mg/L.<br>
+            Hemocultura: negativa (2 pares).<br>
+            USG de cicatriz: sem coleção profunda.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Explique a fisiopatologia da suscetibilidade aumentada à candidiase no DM descompensado.</li>
+          <li>Diferencie candidíase cutânea intertrigo de eritrasma e dermatite de contato clinicamente.</li>
+          <li>Como tratar a candidíase vulvovaginal + cutânea perineal neste contexto? Qual a duração ideal?</li>
+          <li>Qual o impacto da candidíase recorrente no puerpério para o aleitamento materno?</li>
+          <li>Como reorganizar o manejo do DM2 nesta paciente no pós-parto?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="gineco" style="animation-delay:.33s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">16</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Miomatose Múltipla com Infertilidade Primária — Abordagem Cirúrgica e Fertilidade</div>
+          <div class="caso-tags-row"><span class="ctag gineco">Ginecologia</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Renata, 37 anos</span></div>
+          <div class="icard"><label>Miomas</label><span>7 miomas (1,5-6 cm)</span></div>
+          <div class="icard"><label>Sintomas</label><span>Dor pélvica EVN 7/10</span></div>
+          <div class="icard"><label>Infertilidade</label><span>Primária, 4 anos</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação Clínica</div>
+          <p>Dor pélvica crônica com piora perimenstrual, dismenorreia EVN 8/10, dispareunia de profundidade. Menorragia (8 absorventes/dia, 10 dias). Laudo USG: 3 miomas intramurais (2-6 cm), 2 subserosos, 2 pediculados subserosos. Cavidade uterina preservada ao histerossalpingograma. Tubas pérvias. Espermograma do parceiro normal.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Investigação Complementar</div>
+          <div class="hbox sage">
+            RM pelve: útero 16x12x10 cm, maior mioma intramural fúndico 6,2 cm sem distorcer cavidade. Endométrio 8 mm, homogêneo. Sem adenomiose. Ovários normais, sem endometrioma.<br>
+            CA-125: 42 U/mL (levemente elevado). FSH 8,4. AMH 2,1 ng/mL.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como o CA-125 levemente elevado deve ser interpretado neste contexto? Quando preocupar com malignidade?</li>
+          <li>Quais miomas desta paciente têm indicação cirúrgica para infertilidade segundo as diretrizes atuais (ESHRE/ASRM)?</li>
+          <li>Embolização de artéria uterina (EAU) é uma opção? Discuta indicações, contraindicações e impacto na fertilidade.</li>
+          <li>Como diferenciar clinicamente e por imagem mioma de adenomiose? Qual o impacto diferencial no tratamento?</li>
+          <li>Descreva o manejo da dor pélvica crônica nesta paciente enquanto aguarda intervenção definitiva.</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal ist" style="animation-delay:.35s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">17</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Infecção Mista (Trichomonas + Candida) na Gestação com Placenta Prévia</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span><span class="ctag ist">IST</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Simone, 25 anos</span></div>
+          <div class="icard"><label>IG</label><span>22 semanas</span></div>
+          <div class="icard"><label>Pré-natal</label><span>Irregular (1ª consulta)</span></div>
+          <div class="icard"><label>ISTs</label><span>Sífilis e HIV negativos</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Queixa e Achados</div>
+          <p>Corrimento misto: componente espumoso esverdeado (Trichomonas) + componente branco grumoso (Candida). Prurido intenso, dispareunia e ardência. Sem febre. Colo uterino fechado ao especular. CTG basal normal.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Diagnóstico e Exames</div>
+          <div class="hbox coral">
+            PCR (NAAT): T. vaginalis positivo. Cultura: C. albicans.<br>
+            pH vaginal: 5,5. GBS: pendente.<br>
+            Ultrassonografia: placenta prévia marginal, colo 3,8 cm, ILA normal.<br>
+            Hemograma, urina tipo 1 e urocultura normais.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Metronidazol é seguro no 2° trimestre de gestação? Como ficou a classificação de risco na gestação com as atualizações do FDA?</li>
+          <li>Qual esquema terapêutico para tricomoníase na gestação? E para candidíase concomitante?</li>
+          <li>Como a tricomoníase não tratada impacta os desfechos perinatais?</li>
+          <li>A placenta prévia marginal modifica alguma conduta? Há risco adicional com o tratamento vaginal?</li>
+          <li>Como conduzir o rastreio e tratamento do parceiro neste contexto de pré-natal irregular?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="gineco" style="animation-delay:.37s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">18</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">SOP na Adolescente com Transtorno Alimentar e Osteopenia</div>
+          <div class="caso-tags-row"><span class="ctag gineco">Ginecologia</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Beatriz, 17 anos</span></div>
+          <div class="icard"><label>Menarca</label><span>13 anos</span></div>
+          <div class="icard"><label>IMC</label><span>22 kg/m² (peso baixo-normal)</span></div>
+          <div class="icard"><label>Ciclos</label><span>Oligomenorreia desde menarca</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação</div>
+          <p>Oligomenorreia persistente, acne nódulo-cística, leve hirsutismo (FG=9). Mãe preocupada com diagnóstico de "ovário policístico". Adolescente relata restrição alimentar voluntária por "medo de engordar". Avaliação psiquiátrica: ortorexia com traços de anorexia restritiva leve. USG: nódulo hiperecogeico de 3 cm em parede uterina posterior - aparência compatível com mioma intramural.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Laboratoriais</div>
+          <div class="hbox lavender">
+            LH 9,2 · FSH 5,1 · LH/FSH 1,8 · Testosterona total 72 ng/dL · DHEA-S 280 µg/dL · Prolactina 18 ng/mL · TSH 2,3 · Estradiol 38 pg/mL · Insulina 10 mUI/L · HOMA-IR 2,2 · 17-OHP 0,9 ng/mL.<br>
+            Densitometria óssea: Z-score -1,2 (osteopenia leve).
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Os critérios de Rotterdam se aplicam a adolescentes? Quais adaptações são necessárias no diagnóstico de SOP nesta faixa etária?</li>
+          <li>Como o estado nutricional e o transtorno alimentar impactam o eixo hipotálamo-hipofisário-gonadal e o diagnóstico diferencial de oligomenorreia?</li>
+          <li>O mioma intramural de 3 cm em adolescente de 17 anos exige intervenção imediata? Quais hipóteses alternativas de imagem considerar?</li>
+          <li>Como tratar a acne e o hirsutismo nesta paciente com restrição alimentar e sem desejo contraceptivo atual?</li>
+          <li>Qual a abordagem para a osteopenia identificada e o papel do estrogênio nesta adolescente?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="gineco ist" style="animation-delay:.39s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">19</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Caso Integrador: SOP Perimenopáusica com Hiperplasia Endometrial, IST Dupla e DM2</div>
+          <div class="caso-tags-row"><span class="ctag gineco">Caso Integrador</span><span class="ctag ist">IST</span><span class="ctag dmg">DM2</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Rosângela, 50 anos</span></div>
+          <div class="icard"><label>IMC</label><span>38 kg/m²</span></div>
+          <div class="icard"><label>Ciclos</label><span>Irregulares, a espaçar</span></div>
+          <div class="icard"><label>HbA1c</label><span>8,7% (DM2 há 12 anos)</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Histórico e Queixas</div>
+          <p>Histórico de SOP desde a juventude (nunca tratada adequadamente). DM2 em uso de metformina 2 g/dia + sitagliptina 100 mg. Hipertensa (enalapril 20 mg + hidroclorotiazida 25 mg). Apresenta: sangramento uterino irregular com episódios de menorragia, corrimento com duplo componente (espumoso + grumoso), prurido vulvar e dispareunia. Nega infidelidade, mas parceiro com uretrite recente.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Exames e Achados</div>
+          <div class="hbox peach">
+            USG transvaginal: Útero 15 cm, mioma submucoso 3 cm (FIGO tipo 1) + 2 intramurais ≤ 3 cm. Endométrio 12 mm, heterogêneo.<br>
+            Histeroscopia diagnóstica: mioma submucoso + endométrio hiperplásico — biópsia enviada.<br>
+            AP endométrio: <strong>hiperplasia endometrial sem atipia.</strong><br>
+            PCR vaginal: T. vaginalis + C. albicans positivos.<br>
+            HbA1c 8,7% · Triglicerídeos 310 mg/dL · HDL 32 mg/dL · LDL 142 mg/dL · PCR-us 4,8 mg/L · FSH 38 mUI/mL · E2 48 pg/mL (transição menopausal).
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas Integradoras</h4><ol>
+          <li>Como a SOP, obesidade e DM2 criam um ambiente favorável à hiperplasia endometrial? Qual é o risco de progressão para carcinoma?</li>
+          <li>Qual o manejo da hiperplasia endometrial sem atipia neste caso? DIU-LNG é viável com mioma submucoso?</li>
+          <li>Proponha o tratamento simultâneo de tricomoníase + candidíase nesta paciente perimenopáusica diabética.</li>
+          <li>Como organizar o plano terapêutico global priorizando riscos? Construa uma linha de cuidado em 4 fases.</li>
+          <li>Quais as particularidades da transição menopáusica em mulheres com SOP e síndrome metabólica? Como muda o fenótipo da SOP?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal ist sifilis" style="animation-delay:.41s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">20</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Sífilis Gestacional Tardia com Hidropisia Fetal Incipiente</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span><span class="ctag sifilis">Sífilis</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Patrícia, 24 anos</span></div>
+          <div class="icard"><label>IG</label><span>28 semanas</span></div>
+          <div class="icard"><label>VDRL</label><span>1:32 (reagente)</span></div>
+          <div class="icard"><label>Tratamento prévio</label><span>Nenhum documentado</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação</div>
+          <p>Gestante com sífilis diagnosticada tardiamente no 3º trimestre. VDRL 1:32, FTA-Abs reagente. Parceiro com VDRL 1:8 reagente, sem tratamento. USG de 28 semanas revela discreta ascite fetal e espessamento placentário.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Exames</div>
+          <div class="hbox coral">
+            VDRL: 1:32 · FTA-Abs: reagente · HIV: não reagente.<br>
+            USG: ascite fetal leve · espessamento placentário · ILA normal · PFE P28 (discreto atraso).<br>
+            Doppler umbilical: normal.<br>
+            CTG basal: reativo.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como estadiar esta sífilis? Qual o esquema de tratamento conforme o PCDT IST 2022 do MS Brasil?</li>
+          <li>A ascite fetal leve e o espessamento placentário indicam sífilis congênita instalada? Como conduzir?</li>
+          <li>O parceiro com VDRL 1:8 deve ser tratado imediatamente? Qual o protocolo para parceiros de gestantes com sífilis?</li>
+          <li>Como monitorar o VDRL materno após o tratamento ao longo da gestação?</li>
+          <li>O que define sífilis congênita ao nascimento? Quais exames o RN deve realizar?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <!-- ══ SÉRIE 3 ══ -->
+    <div class="serie-label"><span class="serie-pill">Treinamento 3 — Casos Avançados (Obstetrícia Complexa)</span></div>
+
+    <div class="caso" data-tags="prenatal toxo" style="animation-delay:.43s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">21</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Toxoplasmose Aguda no 1º Trimestre com Soroconversão Documentada</div>
+          <div class="caso-tags-row"><span class="ctag toxo">Toxoplasmose</span><span class="ctag prenatal">1º Trimestre</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Luciana, 29 anos</span></div>
+          <div class="icard"><label>IG</label><span>11 semanas</span></div>
+          <div class="icard"><label>IgG toxo (1ª consulta)</label><span>Negativa</span></div>
+          <div class="icard"><label>IgM toxo (retorno)</label><span>Positiva — IgG em ascensão</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação</div>
+          <p>Gestante com soroconversão confirmada entre 9 e 11 semanas. Refere contato com gatos domésticos e ingestão de carne bovina malpassada. Assintomática, sem linfadenopatia. Retornou ao pré-natal com resultado de IgM reagente e IgG em ascensão (&gt;4× o título inicial).</p>
+        </div>
+        <div class="sec"><div class="sec-title">Exames Complementares</div>
+          <div class="hbox gold">
+            <strong>IgG avidez:</strong> 18% (baixa avidez — infecção recente confirmada &lt;16 semanas).<br>
+            <strong>PCR líquido amniótico:</strong> aguardando (amniocentese programada para 18 sem).<br>
+            <strong>USG morfológico 1º tri:</strong> translucência nucal 1,4 mm, sem alterações cerebrais visíveis.<br>
+            <strong>Hemograma, TGO, TGP:</strong> normais. Sem hepatoesplenomegalia.
+          </div>
+        </div>
+        <div class="alerta">
+          <span class="alerta-icon">⚠️</span>
+          <span>Risco de transmissão vertical no 1º trimestre é de 10-15%, porém quando ocorre, as sequelas fetais são mais graves (hidrocefalia, calcificações, coriorretinite).</span>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como interpretar o teste de avidez de IgG na toxoplasmose gestacional? Qual o ponto de corte para alta/baixa avidez?</li>
+          <li>Qual medicação iniciar imediatamente nesta gestante? Espiramicina ou pirimetamina-sulfadiazina — como decidir?</li>
+          <li>Quando indicar amniocentese e como interpretar o PCR do líquido amniótico?</li>
+          <li>Se PCR no LA for positivo, como muda o esquema terapêutico? Qual o papel do ácido folínico?</li>
+          <li>Quais são os achados de imagem fetais que indicam gravidade e como monitorar ao longo da gestação?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="ist sifilis masculino" style="animation-delay:.45s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">22</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Sífilis Secundária em Homem Jovem — Estadiamento, Tratamento e Parcerias</div>
+          <div class="caso-tags-row"><span class="ctag sifilis">Sífilis</span><span class="ctag masculino">Masculino</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Rafael, 26 anos</span></div>
+          <div class="icard"><label>VDRL</label><span>1:64 (reagente)</span></div>
+          <div class="icard"><label>FTA-Abs</label><span>Reagente</span></div>
+          <div class="icard"><label>HIV</label><span>Não reagente</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação Clínica</div>
+          <p>Refere lesão genital indolor há 5 semanas (úlcera que cicatrizou espontaneamente). Há 10 dias: exantema maculopapular difuso incluindo palmas e plantas, alopecia difusa em "traça" e poliadenopatia cervical/axilar/inguinal indolor. Nega febre. Parceiros múltiplos sem preservativo.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Achados e Laboratoriais</div>
+          <div class="hbox coral">
+            Exantema clássico em palmas e plantas (patognomônico de sífilis secundária).<br>
+            Condiloma plano em região perianal (lesão de alta infectividade).<br>
+            VDRL 1:64 · FTA-Abs reagente · HIV negativo · Hepatite B e C negativas.<br>
+            Hemograma: leucócitos 10.800, linfocitose relativa · TGO/TGP discretamente elevadas (1,5× LSN).
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Classifique o estágio da sífilis neste paciente. Quais critérios clínicos e laboratoriais determinam a classificação?</li>
+          <li>Qual o tratamento de escolha? Há alternativa para alérgico a penicilina? Explique a reação de Jarisch-Herxheimer.</li>
+          <li>Como interpretar o VDRL pós-tratamento? Quando considerar falha terapêutica vs. reinfecção?</li>
+          <li>Qual a conduta em relação às parcerias sexuais? Quem deve ser tratado e com qual esquema?</li>
+          <li>O comprometimento hepático muda a conduta? Como a sífilis pode acometer o fígado?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal pe" style="animation-delay:.47s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">23</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Pré-Eclâmpsia Grave com Critérios de Severidade e HELLP Incompleto</div>
+          <div class="caso-tags-row"><span class="ctag pe">PE Grave</span><span class="ctag prenatal">3º Trimestre</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Vanessa, 32 anos</span></div>
+          <div class="icard"><label>IG</label><span>34 semanas</span></div>
+          <div class="icard"><label>PA na admissão</label><span>168/112 mmHg</span></div>
+          <div class="icard"><label>Proteinúria 24h</label><span>4,2 g/24h</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação</div>
+          <p>Primigesta, IMC 29, sem antecedentes relevantes. Admitida em UPA com cefaleia frontal intensa, visão turva com escotomas, dor em barra epigástrica e edema generalizado de instalação rápida (48h). Sem convulsões até o momento.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Dados Clínicos e Laboratoriais</div>
+          <div class="hbox plum">
+            PA: 168/112 e 172/114 mmHg (2 aferições).<br>
+            Proteinúria 4,2 g/24h · Creatinina 1,3 mg/dL · Ácido úrico 7,8 mg/dL.<br>
+            TGO 98 U/L · TGP 86 U/L · LDH 620 U/L · Bilirrubinas normais.<br>
+            Plaquetas 88.000/mm³ · Hb 11,2 g/dL · Esfregaço: esquizócitos presentes.<br>
+            USG obstétrico: oligoâmnio (ILA 4,2 cm), RCIU simétrico, Doppler AU: diástole zero.<br>
+            CTG: variabilidade reduzida, sem desacelerações.
+          </div>
+        </div>
+        <div class="alerta">
+          <span class="alerta-icon">🚨</span>
+          <span><strong>HELLP síndrome incompleta em evolução:</strong> hemólise (LDH+ + esquizócitos), plaquetopenia 88.000 e elevação de enzimas hepáticas. Emergência obstétrica.</span>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Quais critérios definem pré-eclâmpsia com critérios de severidade (ACOG 2019)? Esta paciente os preenche? Justifique.</li>
+          <li>Qual a conduta imediata nos primeiros 30 minutos? Descreva o protocolo de estabilização hemodinâmica.</li>
+          <li>Sulfato de magnésio: qual a dose, via, monitoramento de toxicidade e antídoto?</li>
+          <li>A síndrome HELLP exige interrupção imediata? Há janela para corticoterapia fetal a 34 semanas?</li>
+          <li>Como fazer o controle da PA com anti-hipertensivos no contexto agudo e de manutenção?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal dmg" style="animation-delay:.49s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">24</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">DMG Insulino-Dependente com Feto Grande para Idade Gestacional</div>
+          <div class="caso-tags-row"><span class="ctag dmg">DMG</span><span class="ctag prenatal">Pré-natal</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Luciane, 34 anos</span></div>
+          <div class="icard"><label>IG</label><span>30 semanas</span></div>
+          <div class="icard"><label>HbA1c atual</label><span>7,4% (em uso de insulina)</span></div>
+          <div class="icard"><label>PFE fetal</label><span>P92 (macrossomia)</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Evolução</div>
+          <p>DMG diagnosticada às 24 semanas. Dieta e metformina por 4 semanas sem controle adequado (glicemias em jejum &gt;120 mg/dL persistentes). Iniciada NPH noturna + regular pré-prandial. USG de 30 semanas revela PFE P92, CA aumentada, polidrâmnio leve (ILA 22 cm).</p>
+        </div>
+        <div class="sec"><div class="sec-title">Monitoramento Glicêmico (última semana)</div>
+          <div class="hbox sky">
+            Jejum: 98, 105, 112, 96, 108 mg/dL (média: 104 — acima da meta &lt;95 mg/dL).<br>
+            1h pós-prandial: picos de 155-170 mg/dL (meta: &lt;140 mg/dL).<br>
+            HbA1c: 7,4% (meta: &lt;6,5% no DMG).<br>
+            Cetonúria: negativa. Hipoglicemias noturnas: 2 episódios.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como ajustar o esquema de insulina NPH + regular diante das glicemias de jejum e pós-prandiais ainda elevadas?</li>
+          <li>O polidrâmnio e a macrossomia são complicações diretas do DMG descompensado? Quais são os riscos associados?</li>
+          <li>Qual é o momento ideal para a resolução desta gestação? Discuta os critérios para parto eletivo no DMG insulino-dependente.</li>
+          <li>Como monitorar o RN de mãe com DMG nas primeiras horas de vida? Quais complicações neonatais antecipar?</li>
+          <li>Esta paciente tem risco de DM2 pós-parto? Como conduzir o rastreio e a prevenção?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="ist prenatal vaginose" style="animation-delay:.51s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">25</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Vaginose Bacteriana Recorrente no 2º Trimestre e Risco de Parto Prematuro</div>
+          <div class="caso-tags-row"><span class="ctag ist">Vaginose Bacteriana</span><span class="ctag prenatal">Pré-natal</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Carla, 27 anos</span></div>
+          <div class="icard"><label>IG</label><span>20 semanas</span></div>
+          <div class="icard"><label>Episódios de VB</label><span>3 episódios (este é o 3º)</span></div>
+          <div class="icard"><label>Colo uterino (USG)</label><span>31 mm (limítrofe)</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação</div>
+          <p>Corrimento cinza-homogêneo com odor de peixe, piora pós-coito. Sem prurido intenso. Dois episódios anteriores tratados com metronidazol gel vaginal. Histórico de parto prematuro anterior (34 semanas). Colo uterino de 31 mm ao USG transvaginal desta semana.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Diagnóstico e Exames</div>
+          <div class="hbox sage">
+            Critérios de Amsel (3 de 4 presentes): corrimento homogêneo · pH vaginal 5,2 · Clue cells >20% · Teste das aminas (Whiff) positivo.<br>
+            Escore de Nugent: 8 (VB confirmada).<br>
+            Cultura: Gardnerella vaginalis + Mobiluncus sp.<br>
+            PCR para N. gonorrhoeae e C. trachomatis: negativo.<br>
+            Fibronectina fetal: positiva (26 mcg/L).
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Explique os critérios de Amsel e o escore de Nugent. Quais diferenças entre eles e quando usar cada um?</li>
+          <li>Qual o mecanismo pelo qual a vaginose bacteriana aumenta o risco de parto prematuro?</li>
+          <li>Qual o tratamento de escolha na gestante? Metronidazol oral é seguro? E o gel vaginal?</li>
+          <li>O colo de 31 mm + fibronectina positiva exige internação ou cerclagem? Discuta a tomada de decisão.</li>
+          <li>Como prevenir a recorrência da VB nesta paciente ao longo da gestação?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal pe triagem" style="animation-delay:.53s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">26</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Gestante de Alto Risco: HAS Crônica + DMG + Hipotireoidismo Subclínico na 1ª Consulta</div>
+          <div class="caso-tags-row"><span class="ctag pe">HAS Crônica</span><span class="ctag dmg">DMG</span><span class="ctag prenatal">Alto Risco</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Margarete, 40 anos</span></div>
+          <div class="icard"><label>IG</label><span>10 semanas</span></div>
+          <div class="icard"><label>PA na triagem</label><span>148/92 mmHg</span></div>
+          <div class="icard"><label>Glicemia jejum</label><span>108 mg/dL</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Contexto</div>
+          <p>Gestante de alto risco: 40 anos, obesidade grau I (IMC 32), G4P3, histórico de PE em gestação anterior, pai com DM2. PA aferida 2× com intervalo de 15 min: 148/92 e 144/90 mmHg. Glicemia de jejum 108 mg/dL na triagem. Assintomática.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Dados Laboratoriais Iniciais</div>
+          <div class="hbox gray">
+            Hemograma normal · Creatinina 0,8 mg/dL · Ácido úrico 5,1 mg/dL.<br>
+            Proteinúria (fita): negativa · EAS normal · Urina 24h: 95 mg/24h.<br>
+            HbA1c: 5,7% · Glicemia 2h pós-sobrecarga (TOTG 75g): 148 mg/dL.<br>
+            TSH: 3,8 mUI/L · Anti-TPO: 42 U/mL (levemente elevado).<br>
+            USG 1º tri: embrião único, BCF presente, translucência nucal 1,2 mm.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como diferenciar hipertensão crônica de hipertensão gestacional e pré-eclâmpsia neste momento (10 semanas)?</li>
+          <li>A glicemia de jejum 108 mg/dL no 1º trimestre é diagnóstica de DMG ou DM pré-gestacional? Que condutas imediatas tomar?</li>
+          <li>Esta gestante tem indicação de AAS profilático? Qual dose, quando iniciar e até quando manter?</li>
+          <li>O TSH 3,8 com anti-TPO positivo exige tratamento? Como o hipotireoidismo subclínico impacta a gestação?</li>
+          <li>Monte um plano de pré-natal de alto risco para esta paciente: exames, frequência de consultas e especialistas.</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal toxo" style="animation-delay:.55s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">27</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Toxoplasmose com Imunidade Prévia — Interpretação Sorológica e Conduta</div>
+          <div class="caso-tags-row"><span class="ctag toxo">Toxoplasmose</span><span class="ctag prenatal">Pré-natal</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Débora, 31 anos</span></div>
+          <div class="icard"><label>IG</label><span>8 semanas</span></div>
+          <div class="icard"><label>IgG</label><span>Reagente (1:1024)</span></div>
+          <div class="icard"><label>IgM</label><span>Levemente reagente (borderline)</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Contexto Clínico</div>
+          <p>Gestante preocupada com resultado da sorologia. IgG reagente em alto título + IgM levemente positiva ("borderline"). Relata ter tido toxoplasmose 3 anos atrás (documentada em prontuário antigo). Sem sintomas atuais. Gato doméstico, vacinado.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Exames e Interpretação</div>
+          <div class="hbox teal">
+            IgG: 1:1024 (fortemente reagente) · IgM: levemente reagente (0,6 — VR &lt;0,5).<br>
+            <strong>Teste de avidez IgG: 94% (alta avidez)</strong> — infecção &gt;4-6 meses atrás.<br>
+            Não há soroconversão — IgG pré-existente (infecção antiga documentada).<br>
+            IgM residual pode permanecer reagente por 12-18 meses após infecção.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como explicar o IgM levemente positivo sem infecção recente? Quais causas de IgM falso-positivo?</li>
+          <li>O teste de avidez de 94% é suficiente para tranquilizar esta gestante? Qual é a conduta?</li>
+          <li>Gestante com IgG reagente (imune) precisa de rastreio sorológico periódico? Pode ocorrer reinfecção?</li>
+          <li>Como orientar a gestante imunizada quanto às medidas de proteção durante a gestação?</li>
+          <li>Qual o protocolo do MS Brasil para triagem de toxoplasmose no pré-natal (susceptíveis vs. imunes)?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal pe dmg" style="animation-delay:.57s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">28</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Pré-Eclâmpsia Superimposta em Hipertensa Crônica com DMG — Caso Integrador do 3º Trimestre</div>
+          <div class="caso-tags-row"><span class="ctag pe">PE Superimposta</span><span class="ctag dmg">DMG</span><span class="ctag prenatal">Alto Risco</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Helena, 38 anos</span></div>
+          <div class="icard"><label>IG</label><span>32 semanas</span></div>
+          <div class="icard"><label>PA basal (1º tri)</label><span>134/84 mmHg (alfametildopa)</span></div>
+          <div class="icard"><label>Proteinúria atual</label><span>1.800 mg/24h (novo)</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Evolução Clínica</div>
+          <p>Hipertensa crônica controlada com alfametildopa 750 mg 2×/dia. DMG diagnosticada na 26ª semana, em uso de NPH + regular. Consulta de 32 semanas: piora da PA (164/104 mmHg), nova proteinúria significativa (antes negativa), cefaleia moderada. Sem convulsões.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Exames de 32 Semanas</div>
+          <div class="hbox plum">
+            PA: 164/104 (nova piora sobre HAS prévia controlada).<br>
+            Proteinúria 24h: 1.800 mg (era &lt;150 mg/24h no 1º tri) — nova proteinúria = PE superimposta.<br>
+            Creatinina 1,1 mg/dL · TGO 55 U/L · Plaquetas 112.000 · LDH 480 U/L.<br>
+            USG: RCIU moderado (P18) · Doppler AU: índice de resistência elevado (0,78) sem diástole zero.<br>
+            HbA1c: 6,8% (controle razoável do DMG). Glicemia capilar: picos de 180 mg/dL pós-prandial.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas para Raciocínio Clínico</h4><ol>
+          <li>Como se define pré-eclâmpsia superimposta em hipertensa crônica? Quais critérios diagnósticos específicos?</li>
+          <li>O RCIU com Doppler alterado (IR elevado sem diástole zero) a 32 semanas exige interrupção imediata?</li>
+          <li>Como ajustar o esquema anti-hipertensivo neste caso? Alfametildopa é suficiente?</li>
+          <li>A insulinoterapia precisa ser reavaliada no contexto da PE superimposta? Quais interações entre o estresse hipertensivo e o controle glicêmico?</li>
+          <li>Qual é o momento ideal para a resolução desta gestação? Discuta os critérios de parto eletivo vs. urgência.</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal ist sifilis vaginose dmg pe" style="animation-delay:.59s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">29</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Adolescente Vulnerável com 5 Condições Simultâneas na 1ª Consulta de Pré-Natal (30 sem)</div>
+          <div class="caso-tags-row"><span class="ctag prenatal">Pré-natal</span><span class="ctag sifilis">Sífilis</span><span class="ctag pe">HAS</span><span class="ctag ist">Vaginose</span><span class="ctag dmg">Glicemia</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Solange, 18 anos</span></div>
+          <div class="icard"><label>IG</label><span>30 semanas</span></div>
+          <div class="icard"><label>Consultas pré-natal</label><span>0 anteriores (1ª consulta)</span></div>
+          <div class="icard"><label>Situação social</label><span>Sem renda, moradia irregular</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Apresentação</div>
+          <p>Adolescente, primigesta, procura UBS pela 1ª vez na 30ª semana. Refere corrimento fétido há meses, cansaço, edema de MMII há 2 semanas. Nega violência. Companheiro com "lesão no pênis há 1 mês". Não realizou nenhum exame prévio.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Triagem na 1ª Consulta</div>
+          <div class="hbox gold">
+            <strong>PA:</strong> 152/98 mmHg (2 aferições) — proteinúria fita: 1+.<br>
+            <strong>Glicemia jejum:</strong> 118 mg/dL — possível DMG não rastreada.<br>
+            <strong>VDRL:</strong> reagente 1:16 · FTA-Abs: reagente — Sífilis gestacional (sem tratamento prévio).<br>
+            <strong>HIV:</strong> não reagente · Hepatite B: AgHBs negativo (não vacinada).<br>
+            <strong>Toxoplasmose:</strong> IgG negativa · IgM negativa — susceptível.<br>
+            <strong>Exame ginecológico:</strong> corrimento cinza com pH 5,5 e clue cells — VB confirmada.<br>
+            <strong>USG 30 semanas:</strong> PFE P45, ILA 12 cm, placenta anterior grau II, colo 28 mm.
+          </div>
+        </div>
+        <div class="alerta">
+          <span class="alerta-icon">🚨</span>
+          <span>Gestante com pelo menos 5 condições simultâneas de risco: hipertensão gestacional/PE incipiente + glicemia alterada + sífilis não tratada + VB + susceptível à toxoplasmose. Exige plano de cuidados prioritizado e urgente.</span>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas Integradoras</h4><ol>
+          <li>Qual a ordem de prioridade para abordar os problemas identificados nesta consulta? Justifique com base no risco materno-fetal imediato.</li>
+          <li>Como conduzir a sífilis gestacional nesta paciente e como envolver o companheiro (com lesão peniana ativa)?</li>
+          <li>A PA de 152/98 com proteinúria 1+ na fita a 30 semanas configura pré-eclâmpsia? Quais exames pedir na urgência?</li>
+          <li>Proponha o tratamento simultâneo da vaginose bacteriana e a profilaxia para toxoplasmose nesta gestante susceptível.</li>
+          <li>Como construir um plano de vinculação, acompanhamento intensivo e suporte social para esta adolescente vulnerável até o parto?</li>
+        </ol></div>
+      </div>
+    </div>
+
+    <div class="caso" data-tags="prenatal ist sifilis dmg pe toxo" style="animation-delay:.61s">
+      <div class="caso-header" onclick="toggle(this)">
+        <div class="caso-num">30</div><div class="divider-line"></div>
+        <div class="caso-info">
+          <div class="caso-titulo">Caso Integrador Final: Gestante com PE Superimposta, DMG e Sífilis — Resolução da Gestação</div>
+          <div class="caso-tags-row"><span class="ctag pe">PE Superimposta</span><span class="ctag dmg">DMG</span><span class="ctag sifilis">Sífilis</span><span class="ctag prenatal">Alto Risco</span></div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="caso-body">
+        <div class="info-grid">
+          <div class="icard"><label>Paciente</label><span>Carolina, 35 anos</span></div>
+          <div class="icard"><label>IG</label><span>36 semanas</span></div>
+          <div class="icard"><label>PA</label><span>158/106 mmHg</span></div>
+          <div class="icard"><label>HbA1c</label><span>7,1% (DMG insulino-dependente)</span></div>
+        </div>
+        <div class="sec"><div class="sec-title">Histórico e Evolução</div>
+          <p>Hipertensa crônica em uso de alfametildopa desde o 1º trimestre. DMG diagnosticada às 26 semanas, em uso de NPH + regular com controle parcial. VDRL 1:8 detectado às 28 semanas, tratada com penicilina benzatina 2,4 MUI (1 dose — tratamento incompleto por abandono). PA piora progressiva a partir de 34 semanas, com surgimento de proteinúria +2 e cefaleia.</p>
+        </div>
+        <div class="sec"><div class="sec-title">Dados Atuais (36 semanas)</div>
+          <div class="hbox plum">
+            PA: 158/106 mmHg · Proteinúria 24h: 680 mg · Creatinina 1,0 mg/dL.<br>
+            Plaquetas 145.000 · TGO 48 U/L · LDH 390 U/L.<br>
+            VDRL atual: 1:4 (queda de 2 títulos — resposta parcial ao tratamento incompleto).<br>
+            USG: PFE P38, ILA 10 cm, Doppler normal. Colo uterino: Bishop 6.<br>
+            CTG basal: reativo. HbA1c: 7,1%.
+          </div>
+        </div>
+        <div class="pbloco"><h4>🩺 Perguntas Integradoras</h4><ol>
+          <li>O tratamento da sífilis com apenas 1 dose de penicilina benzatina é considerado adequado? O que fazer agora com VDRL 1:4?</li>
+          <li>A proteinúria de 680 mg/24h em hipertensa crônica configura PE superimposta? Quais os critérios e como diferenciar?</li>
+          <li>Com Bishop 6 e 36 semanas, qual a via de parto mais adequada? Como o DMG e a PE influenciam essa decisão?</li>
+          <li>Como fazer a transição da insulinoterapia no periparto? Quais cuidados no dia do parto e nas primeiras horas pós-parto?</li>
+          <li>Quais condutas são obrigatórias para o RN desta mãe com sífilis parcialmente tratada? Quando o RN é considerado portador de sífilis congênita?</li>
+        </ol></div>
+      </div>
+    </div>
+
+  </div><!-- /casos-lista -->
+</div><!-- /container -->
+
+<footer>
+  <!-- Logo ENA: navy escuro, ícone 3 quadrados sobrepostos, tipografia serifada -->
+  <div style="display:inline-flex;align-items:center;gap:12px;margin-bottom:1rem;">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <rect x="4" y="12" width="18" height="18" rx="5" fill="#8090c0" opacity=".65"/>
+      <rect x="18" y="4" width="18" height="18" rx="5" fill="#c9933a" opacity=".85"/>
+      <rect x="11" y="18" width="18" height="18" rx="5" fill="#7b6bae"/>
+    </svg>
+    <div style="text-align:left;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#f0ece4;line-height:1.2;">Enfermeira</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;color:#f0ece4;line-height:1.2;">na Área</div>
+    </div>
+  </div>
+  <div style="font-size:.75rem;color:#8090a8;">
+    Casos clínicos elaborados para fins educacionais · FEBRASGO · MS Brasil PCDT IST 2022 · ACOG · ESHRE · ADA 2024
+  </div>
+</footer>
+
+<script>
+function toggle(header) {
+  const caso = header.closest('.caso');
+  caso.classList.toggle('open');
+  updateProgress();
+}
+function filtrar(tag, btn) {
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let count = 0;
+  document.querySelectorAll('.caso').forEach((caso, i) => {
+    const match = tag === 'todos' || (caso.dataset.tags && caso.dataset.tags.includes(tag));
+    caso.classList.toggle('hidden', !match);
+    if (match) { count++; caso.style.animationDelay = (count * 0.06) + 's'; }
+  });
+  document.querySelectorAll('.fbtn.active')[0].textContent = tag === 'todos'
+    ? 'Todos (30)' : btn.textContent.split(' (')[0] + ' (' + count + ')';
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.caso').length;
+  const open = document.querySelectorAll('.caso.open').length;
+  document.getElementById('progressFill').style.width = (total > 0 ? (open/total)*100 : 0) + '%';
+}
+</script>
+</body>
+</html>
